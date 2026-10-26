@@ -1,0 +1,42 @@
+name: Auto-Bump Version and Push to Docker Hub
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build-and-bump:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # Required so the workflow can write and push the new version tag back to GitHub
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Crucial: fetches all past git tags so it knows what the current version is
+
+      - name: Bump version and push tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          default_bump: patch # Automatically increments patch version (e.g., 1.0.0 -> 1.0.1)
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+      #    context: .
+          push: true
+          tags: |
+            nitinkc/myapp:${{ steps.tag_version.outputs.new_tag }}
+            nitinkc/myapp:latest
