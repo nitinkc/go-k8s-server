@@ -35,7 +35,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-      #    context: .
+          context: .
           push: true
           tags: |
             nitinkc/myapp:${{ steps.tag_version.outputs.new_tag }}
