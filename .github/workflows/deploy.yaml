@@ -39,5 +39,5 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            nitinkc/myapp:${{ steps.tag_version.outputs.new_tag }}
-            nitinkc/myapp:latest
+            nitinkc/go-k8s-server:${{ steps.tag_version.outputs.new_tag }}
+            nitinkc/go-k8s-server:latest
