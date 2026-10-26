@@ -38,6 +38,7 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
+          platforms: linux/amd64,linux/arm64
           tags: |
             nitinkc/go-k8s-server:${{ steps.tag_version.outputs.new_tag }}
             nitinkc/go-k8s-server:latest
