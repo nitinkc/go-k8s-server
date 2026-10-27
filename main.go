@@ -95,29 +95,9 @@ type LoginRecord struct {
 func main() {
     port := getEnv("PORT", "8080")
 
-    // Root: simple page with a "login" button + saved records
+    // Root endpoint
     http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-        w.Header().Set("Content-Type", "text/html")
-        fmt.Fprint(w, `<!doctype html>
-<html><body>
-<h2>Go k8s server — Redis persistence POC</h2>
-<button onclick="save()">Simulate Login &amp; Save to Redis</button>
-<pre id="out"></pre>
-<script>
-async function save() {
-  const r = await fetch('/login', {method: 'POST'});
-  document.getElementById('out').textContent = await r.text();
-  load();
-}
-async function load() {
-  const r = await fetch('/logins');
-  const data = await r.json();
-  document.getElementById('out').textContent =
-    'Saved records (' + data.length + '):\n' + JSON.stringify(data, null, 2);
-}
-load();
-</script>
-</body></html>`)
+        fmt.Fprintf(w, "Hello from Kubernetes! Go app is running successfully.")
     })
 
     // Health check endpoint for K8s probes
